@@ -15,6 +15,26 @@ function createPosition(request, response) {
   );
 }
 
+const readPosition = (req, res) => {
+  const value = req.body;
+
+  positionService.read(
+    value,
+    (data) => res.status(201).json(data),
+    (error) => res.status(400).json(error)
+  );
+};
+
+const updatePosition = (req, res) => {
+  const value = req.body;
+
+  positionService.update(
+    value,
+    (data) => res.status(201).json(data),
+    (error) => res.status(400).json(error)
+  );
+};
+
 const deletePosition = (req, res) => {
   const value = req.body;
 
@@ -27,6 +47,8 @@ const deletePosition = (req, res) => {
   );
 };
 
+positionRouter.route("").get(readPosition);
+positionRouter.route("").put(updatePosition);
 positionRouter.route("").delete(deletePosition);
 
 module.exports = positionRouter;

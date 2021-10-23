@@ -6,8 +6,18 @@ const PositionService = {
       .then((data) => success(data))
       .catch((error) => fail(error));
   },
+  read: (item, success, fail) => {
+    PositionModel.find(item)
+      .then((data) => success(data))
+      .catch((error) => fail(error));
+  },
+  update: (item, success, fail) => {
+    PositionModel.updateOne(item.old, item.new)
+      .then((data) => success(data))
+      .catch((error) => fail(error));
+  },
   delete: (item, success, fail) => {
-    PositionModel.findOneAndDelete(item)
+    PositionModel.deleteOne(item)
       .then((data) => success(data))
       .catch((error) => fail(error));
   },

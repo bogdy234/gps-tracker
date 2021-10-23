@@ -4,12 +4,13 @@ const positionRouter = require("./Positions/Controller");
 
 const app = express();
 
+const config = require("./config");
+
 function startServer() {
   app.listen(4000, () => console.log("running"));
 }
 
-const db =
-  "mongodb+srv://root:root@scd-project.usnxf.mongodb.net/scd-project?retryWrites=true&w=majority";
+const db = config.CONNECTION_STRING;
 
 function startDatabase() {
   mongoose.connect(db, () => console.log("connected"));

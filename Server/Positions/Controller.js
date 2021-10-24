@@ -3,8 +3,6 @@ const positionService = require("./Service");
 
 const positionRouter = express.Router();
 
-positionRouter.route("").post(createPosition);
-
 function createPosition(request, response) {
   const value = request.body;
 
@@ -41,14 +39,23 @@ const deletePosition = (req, res) => {
   positionService.delete(
     value,
     () => res.status(201).json("Succesfully Deleted!"),
-    (error) => {
-      res.status(400).json(error);
-    }
+    (error) => res.status(400).json(error)
   );
 };
 
+const readPositionBetweenDates = (req, res) => {
+  const value = req.body;
+  positionService.readBetweenDates(
+    value,
+    (data) => res.status(201).json(data),
+    (error) => res.status(400).json(error)
+  );
+};
+
+positionRouter.route("").post(createPosition);
 positionRouter.route("").get(readPosition);
 positionRouter.route("").put(updatePosition);
 positionRouter.route("").delete(deletePosition);
+positionRouter.route("/date").get(readPositionBetweenDates);
 
 module.exports = positionRouter;

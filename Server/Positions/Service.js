@@ -21,6 +21,15 @@ const PositionService = {
       .then((data) => success(data))
       .catch((error) => fail(error));
   },
+  readBetweenDates: (item, success, fail) => {
+    const { startDate, endDate, terminalId } = item;
+    PositionModel.findOne({
+      date: { $gt: startDate, $lt: endDate },
+      terminalId,
+    })
+      .then((data) => success(data))
+      .catch((error) => fail(error));
+  },
 };
 
 module.exports = PositionService;

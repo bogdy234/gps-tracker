@@ -44,7 +44,7 @@ const deletePosition = (req, res) => {
 };
 
 const readPositionBetweenDates = (req, res) => {
-  const value = req.body;
+  const value = req.query;
   positionService.readBetweenDates(
     value,
     (data) => res.status(201).json(data),

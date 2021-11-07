@@ -3,8 +3,8 @@ export const requestLocationPermission = async PermissionsAndroid => {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       {
-        title: 'Example App',
-        message: 'Example App access to your location ',
+        title: 'gps-tracker',
+        message: 'GPS tracker wants to access your location',
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {

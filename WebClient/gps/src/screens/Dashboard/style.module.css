@@ -1,0 +1,48 @@
+.dashboardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+.logoutButton {
+  align-self: flex-end;
+}
+
+.startDate {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.endDate {
+  padding-bottom: 20px;
+}
+
+.errorMessage {
+  padding-top: 5px;
+  color: red;
+}
+
+.dataContainer {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table {
+  width: 500px;
+}
+
+.table,
+th,
+td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  padding: 4px;
+}
+
+.noDataMessage {
+  padding-top: 20px;
+}

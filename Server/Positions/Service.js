@@ -23,7 +23,7 @@ const PositionService = {
   },
   readBetweenDates: (item, success, fail) => {
     const { startDate, endDate, terminalId } = item;
-    PositionModel.findOne({
+    PositionModel.find({
       date: { $gt: startDate, $lt: endDate },
       terminalId,
     })

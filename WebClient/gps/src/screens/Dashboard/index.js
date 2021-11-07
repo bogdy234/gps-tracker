@@ -123,8 +123,14 @@ const Dashboard = () => {
           defaultCenter={{ lat: 46.75971479746877, lng: 23.61481273331003 }}
           defaultZoom={12}
         >
-          {coordinatesData.map((data) => {
-            return <Marker lat={data.latitude} lng={data.longitude}></Marker>;
+          {coordinatesData.map((data, index) => {
+            return (
+              <Marker
+                lat={data.latitude}
+                lng={data.longitude}
+                key={index}
+              ></Marker>
+            );
           })}
         </GoogleMapReact>
       </div>

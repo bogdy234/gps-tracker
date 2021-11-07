@@ -1,15 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Input from "../../components/Input";
 import C from "../../utils/constants";
-import LoginContext from "../../utils/login/loginContext";
 import styles from "./style.module.css";
 
 const hardcodedUserData = { username: "fili", password: "parola" };
 
 const Login = () => {
   const history = useHistory();
-  const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
   const [userData, setUserData] = useState({ username: "", password: "" });
 
   const getValue = (data, value) => {
@@ -40,14 +38,9 @@ const Login = () => {
 
   const loginSuccessfully = () => {
     console.log("success");
-    setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", true);
     history.push("/dashboard");
   };
-
-  useEffect(() => {
-    console.log(isLoggedIn);
-  }, [isLoggedIn]);
 
   const handleLogin = () => {
     const { username, password } = userData;

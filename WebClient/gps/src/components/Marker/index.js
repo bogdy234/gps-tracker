@@ -7,6 +7,7 @@ const Marker = ({ lat, lng, text = "" }) => {
       <img
         src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Red_Point.gif"
         className={styles.image}
+        alt="marker"
       />
     </div>
   );

@@ -46,3 +46,7 @@ td {
 .noDataMessage {
   padding-top: 20px;
 }
+
+.centeredCellContent {
+  text-align: center;
+}

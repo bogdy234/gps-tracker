@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Marker from "../../components/Marker";
 import DateTimePickerContainer from "../../components/DateTimePickerContainer";
-import styles from "./style.module.css";
+import IconButton from "../../components/IconButton";
+
 import C from "../../utils/constants";
-import GoogleMapReact from "google-map-react";
 import { formatDate } from "../../utils/index";
+
+import GoogleMapReact from "google-map-react";
+import styles from "./style.module.css";
+import api from "../../api";
 
 const Dashboard = () => {
   const history = useHistory();
@@ -23,13 +28,13 @@ const Dashboard = () => {
   const [coordinatesData, setCoordinatesData] = useState([]);
 
   useEffect(() => {
-    if (!localStorage.getItem(C.IS_LOGGED_IN)) {
+    if (!sessionStorage.getItem(C.IS_LOGGED_IN)) {
       history.push("/");
     }
   }, [history]);
 
   const handleLogout = () => {
-    localStorage.removeItem(C.IS_LOGGED_IN);
+    sessionStorage.removeItem(C.IS_LOGGED_IN);
     history.push("/");
   };
 
@@ -56,14 +61,11 @@ const Dashboard = () => {
   const getDataHandler = async () => {
     if (startDate && endDate && terminalId) {
       toggleFalseErrorMessages();
-      const response = await fetch(
-        C.URL +
-          `?terminalId=${terminalId}&startDate=${startDate}&endDate=${endDate}`,
-        {
-          method: "GET",
-        }
-      );
-      const jsonResponse = await response.json();
+      const jsonResponse = await api.get(C.URL_DATE, {
+        terminalId: `${terminalId}`,
+        startDate: `${startDate}`,
+        endDate: `${endDate}`,
+      });
       console.log(jsonResponse);
       setCoordinatesData(jsonResponse);
 
@@ -78,6 +80,18 @@ const Dashboard = () => {
         noData: false,
       });
     }
+  };
+
+  const handleDelete = async (id) => {
+    const response = await api.del(C.URL, { value: id });
+
+    if (!response || !response.deleted) return;
+
+    const newCoordinatesData = coordinatesData.filter(
+      (coordData) => coordData._id !== id
+    );
+    console.log(newCoordinatesData);
+    setCoordinatesData(newCoordinatesData);
   };
 
   return (
@@ -152,6 +166,15 @@ const Dashboard = () => {
                   <td>{data.latitude}</td>
                   <td>{data.longitude}</td>
                   <td>{formatDate(data.date)}</td>
+                  <td className={styles.centeredCellContent}>
+                    <IconButton
+                      src="/trash-solid.svg"
+                      alt="trash-icon"
+                      onClick={() => handleDelete(data._id)}
+                      width={20}
+                      height={20}
+                    />
+                  </td>
                 </tr>
               );
             })}

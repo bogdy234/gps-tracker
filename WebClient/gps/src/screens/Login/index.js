@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
     if (isLoggedIn) {
       history.push("/dashboard");
     }
@@ -38,7 +38,7 @@ const Login = () => {
 
   const loginSuccessfully = () => {
     console.log("success");
-    localStorage.setItem("isLoggedIn", true);
+    sessionStorage.setItem("isLoggedIn", true);
     history.push("/dashboard");
   };
 

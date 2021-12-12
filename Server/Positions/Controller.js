@@ -38,8 +38,9 @@ const deletePosition = (req, res) => {
 
   positionService.delete(
     value,
-    () => res.status(201).json("Succesfully Deleted!"),
-    (error) => res.status(400).json(error)
+    () =>
+      res.status(201).json({ message: "Successfully Deleted!", deleted: true }),
+    (error) => res.status(400).json({ message: error, deleted: false })
   );
 };
 

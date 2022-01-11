@@ -6,6 +6,11 @@
   padding-bottom: 80px;
 }
 
+.getButtonsContainer {
+  display: flex;
+  gap: 20px;
+}
+
 .logoutButton {
   align-self: flex-end;
 }

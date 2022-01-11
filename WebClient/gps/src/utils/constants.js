@@ -7,6 +7,7 @@ const C = {
   START_DATE: "Start Date",
   END_DATE: "End Date",
   GET_DATA: "Get Data",
+  GET_ALL_DATA: "Get All Data",
   URL: "http://localhost:4000/positions",
   URL_DATE: "http://localhost:4000/positions/date",
   START_DATE_ERROR: "You need to enter a start date!",

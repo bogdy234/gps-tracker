@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Marker from "../../components/Marker";
+import Modal from "../../components/Modal";
 import DateTimePickerContainer from "../../components/DateTimePickerContainer";
 import IconButton from "../../components/IconButton";
 
@@ -26,6 +27,8 @@ const Dashboard = () => {
     noData: false,
   });
   const [coordinatesData, setCoordinatesData] = useState([]);
+  const [modalOpened, setModalOpened] = useState(false);
+  const [selectedData, setSelectedData] = useState();
 
   useEffect(() => {
     if (!sessionStorage.getItem(C.IS_LOGGED_IN)) {
@@ -66,7 +69,7 @@ const Dashboard = () => {
         startDate: `${startDate}`,
         endDate: `${endDate}`,
       });
-      console.log(jsonResponse);
+      console.log("here", jsonResponse);
       setCoordinatesData(jsonResponse);
 
       if (!jsonResponse.length) {
@@ -94,8 +97,72 @@ const Dashboard = () => {
     setCoordinatesData(newCoordinatesData);
   };
 
+  const getAllDataHandler = async () => {
+    if (!terminalId) {
+      setShowErrorMessages({
+        terminalId: true,
+        startDate: false,
+        endDate: false,
+        noData: false,
+      });
+      return;
+    }
+
+    toggleFalseErrorMessages();
+
+    const jsonResponse = await api.get(`${C.URL}/readAll`, {
+      terminalId: `${terminalId}`,
+    });
+    console.log("here", jsonResponse);
+    setCoordinatesData(jsonResponse);
+
+    if (!jsonResponse.length) {
+      setShowErrorMessages((prevValue) => ({ ...prevValue, noData: true }));
+    }
+  };
+
+  const closeModal = () => {
+    setModalOpened(false);
+  };
+
+  const saveChanges = async (newLatitude, newLongitude) => {
+    console.log("id:", selectedData._id);
+    console.log("latitude:", newLatitude);
+    console.log("longitude:", newLongitude);
+    const jsonResponse = await api.put(C.URL, {
+      id: selectedData._id,
+      newValue: {
+        latitude: newLatitude,
+        longitude: newLongitude,
+      },
+    });
+    console.log(jsonResponse);
+    setModalOpened(false);
+
+    const updatedCoordinatesData = coordinatesData.map((coordinate) =>
+      coordinate._id === selectedData._id
+        ? { ...coordinate, latitude: newLatitude, longitude: newLongitude }
+        : coordinate
+    );
+    setCoordinatesData([...updatedCoordinatesData]);
+  };
+
+  const handleEdit = (data) => {
+    setModalOpened(true);
+    console.log("data", data);
+    setSelectedData(data);
+  };
+
   return (
     <div className={styles.dashboardContainer}>
+      {modalOpened && (
+        <Modal
+          defaultLatitude={selectedData.latitude}
+          defaultLongitude={selectedData.longitude}
+          closeModal={closeModal}
+          saveChanges={saveChanges}
+        />
+      )}
       <div className={styles.logoutButton}>
         <Button onClick={handleLogout} text={C.LOGOUT} />
       </div>
@@ -127,7 +194,10 @@ const Dashboard = () => {
           <div className={styles.errorMessage}>{C.END_DATE_ERROR}</div>
         )}
       </div>
-      <Button text={C.GET_DATA} onClick={getDataHandler} />
+      <div className={styles.getButtonsContainer}>
+        <Button text={C.GET_DATA} onClick={getDataHandler} />
+        <Button text={C.GET_ALL_DATA} onClick={getAllDataHandler} />
+      </div>
       {showErrorMessages.noData && (
         <div className={styles.noDataMessage}>{C.NO_DATA_MESSAGE}</div>
       )}
@@ -161,7 +231,7 @@ const Dashboard = () => {
           <tbody>
             {coordinatesData.map((data, index) => {
               return (
-                <tr key={data._id}>
+                <tr key={data._id} onDoubleClick={() => handleEdit(data)}>
                   <td>{index + 1}</td>
                   <td>{data.latitude}</td>
                   <td>{data.longitude}</td>

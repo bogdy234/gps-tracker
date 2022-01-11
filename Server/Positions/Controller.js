@@ -9,7 +9,10 @@ function createPosition(request, response) {
   positionService.create(
     value,
     (data) => response.status(201).json(data),
-    (error) => response.status(400).json(error)
+    (error) => {
+      console.log(error);
+      return response.status(400).json(error);
+    }
   );
 }
 
@@ -53,10 +56,20 @@ const readPositionBetweenDates = (req, res) => {
   );
 };
 
+const readAllPositions = (req, res) => {
+  const value = req.query;
+  positionService.readAll(
+    value,
+    (data) => res.status(201).json(data),
+    (error) => res.status(400).json(error)
+  );
+};
+
 positionRouter.route("").post(createPosition);
 positionRouter.route("").get(readPosition);
 positionRouter.route("").put(updatePosition);
 positionRouter.route("").delete(deletePosition);
 positionRouter.route("/date").get(readPositionBetweenDates);
+positionRouter.route("/readAll").get(readAllPositions);
 
 module.exports = positionRouter;
